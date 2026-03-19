@@ -1,11 +1,13 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/scan.py",  "use": "@vercel/python" },
-    { "src": "api/leads.py", "use": "@vercel/python" }
+    { "src": "api/scan.py", "use": "@vercel/python" },
+    { "src": "api/leads.py", "use": "@vercel/python" },
+    { "src": "public/**", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/api/scan",  "dest": "/api/scan.py"  },
-    { "src": "/api/leads", "dest": "/api/leads.py" }
+    { "src": "/api/scan", "dest": "/api/scan.py" },
+    { "src": "/api/leads", "dest": "/api/leads.py" },
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
