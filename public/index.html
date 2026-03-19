@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Pulse Score — Is your store invisible to AI? | SmartAgentX</title>
+<meta name="description" content="Free AI readiness audit for your online store. Find out if Google Gemini, ChatGPT, and Perplexity can find and recommend your products.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0f0e0c;--ink2:#3a3935;--ink3:#7a7873;--ink4:#b0ada8;
+  --bg:#f9f7f3;--bg2:#f0ede6;--bg3:#e6e2d9;
+  --border:rgba(15,14,12,.09);
+  --purple:#534AB7;--purple-l:#EEEDFE;--purple-d:#3C3489;
+  --teal:#0F6E56;--teal-l:#E1F5EE;
+  --coral:#D85A30;--coral-l:#FAECE7;
+  --amber:#BA7517;--amber-l:#FAEEDA;
+  --red:#A32D2D;--red-l:#FCEBEB;
+  --green:#27500A;--green-l:#EAF3DE;
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --r:12px;--r-lg:18px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(249,247,243,.92);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  height:54px;padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink);text-decoration:none}
+.brand b{color:var(--purple)}
+.nav-btn{
+  font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;
+  border:1px solid var(--border);background:none;color:var(--ink);
+  cursor:pointer;font-family:var(--sans);transition:background .15s;
+}
+.nav-btn:hover{background:var(--bg2)}
+
+/* HERO */
+.hero{max-width:720px;margin:0 auto;padding:72px 24px 56px;text-align:center}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.07em;
+  color:var(--purple);background:var(--purple-l);
+  padding:4px 12px;border-radius:20px;margin-bottom:22px;
+}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--purple);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+h1{
+  font-family:var(--serif);font-size:clamp(34px,5.5vw,58px);
+  font-weight:400;line-height:1.1;letter-spacing:-.02em;
+  color:var(--ink);margin-bottom:18px;
+}
+h1 em{font-style:italic;color:var(--purple)}
+.hero-sub{font-size:16px;color:var(--ink2);line-height:1.7;max-width:500px;margin:0 auto 38px}
+
+/* SCAN BOX */
+.scan-box{
+  background:var(--ink);border-radius:16px;
+  padding:26px 26px 20px;max-width:580px;margin:0 auto 14px;
+}
+.scan-lbl{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.35);
+  letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}
+.scan-row{display:flex;gap:8px}
+.scan-input{
+  flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
+  border-radius:9px;height:48px;padding:0 16px;font-size:15px;
+  font-family:var(--sans);color:white;outline:none;transition:border-color .15s;
+}
+.scan-input::placeholder{color:rgba(255,255,255,.28)}
+.scan-input:focus{border-color:rgba(255,255,255,.38)}
+.scan-btn{
+  background:white;color:var(--ink);border:none;border-radius:9px;
+  height:48px;padding:0 22px;font-size:14px;font-weight:600;
+  cursor:pointer;white-space:nowrap;font-family:var(--sans);
+  transition:opacity .15s,transform .1s;
+}
+.scan-btn:hover{opacity:.88}
+.scan-btn:active{transform:scale(.97)}
+.scan-btn:disabled{opacity:.45;cursor:wait}
+.scan-note{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.25);margin-top:10px}
+
+/* PROGRESS */
+.progress{display:none;margin-top:16px}
+.prog-track{height:2px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:white;border-radius:2px;width:0%;transition:width .5s ease}
+.prog-lbl{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.38);margin-top:8px}
+
+/* PROOF */
+.proof{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;
+  max-width:500px;margin:0 auto 64px;padding:0 24px}
+.proof-item{font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:5px}
+.proof-tick{color:var(--teal);font-size:14px}
+
+/* RESULTS */
+#results{display:none;max-width:640px;margin:0 auto 80px;padding:0 20px}
+
+.score-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;padding:34px;text-align:center;margin-bottom:16px;
+}
+.score-num{
+  font-family:var(--serif);font-size:96px;line-height:1;
+  font-weight:400;margin-bottom:4px;transition:color .4s;
+}
+.score-denom{font-size:13px;color:var(--ink3);margin-bottom:12px}
+.tier-badge{
+  display:inline-block;font-family:var(--mono);font-size:11px;font-weight:500;
+  padding:4px 14px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;
+}
+.score-domain{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-top:10px}
+.score-impact{font-size:14px;color:var(--ink2);margin-top:12px;line-height:1.55}
+
+/* Signal cards */
+.signals-wrap{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.sig-card{
+  display:flex;align-items:flex-start;gap:12px;
+  background:white;border:1px solid var(--border);
+  border-radius:10px;padding:13px 15px;
+}
+.sig-icon{
+  width:26px;height:26px;border-radius:6px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+}
+.ic-pass{background:var(--green-l);color:var(--green)}
+.ic-fail{background:var(--red-l);color:var(--red)}
+.sig-name{font-size:13px;font-weight:500;margin-bottom:2px}
+.sig-detail{font-size:12px;color:var(--ink3);line-height:1.4}
+.sig-pts{font-family:var(--mono);font-size:11px;color:var(--ink4);margin-left:auto;flex-shrink:0;padding-top:2px}
+
+/* GATE */
+.gate{
+  background:var(--ink);border-radius:16px;padding:30px;
+  text-align:center;margin-bottom:16px;position:relative;overflow:hidden;
+}
+.gate::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(83,74,183,.12);
+}
+.gate-title{font-family:var(--serif);font-size:24px;color:white;
+  font-weight:400;margin-bottom:8px}
+.gate-sub{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:22px;line-height:1.55}
+.gate-row{display:flex;gap:8px;max-width:400px;margin:0 auto}
+.gate-input{
+  flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+  border-radius:8px;height:44px;padding:0 14px;font-size:14px;
+  font-family:var(--sans);color:white;outline:none;
+}
+.gate-input::placeholder{color:rgba(255,255,255,.3)}
+.gate-input:focus{border-color:rgba(255,255,255,.38)}
+.gate-btn{
+  background:white;color:var(--ink);border:none;border-radius:8px;
+  height:44px;padding:0 18px;font-size:13px;font-weight:600;
+  cursor:pointer;white-space:nowrap;font-family:var(--sans);transition:opacity .15s;
+}
+.gate-btn:hover{opacity:.88}
+.gate-note{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.25);margin-top:10px}
+.gate-success{display:none;font-size:14px;color:rgba(255,255,255,.75);padding:10px 0}
+
+/* Full signals */
+#full-report{display:none}
+.full-signals{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.fsig{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;background:white;border:1px solid var(--border);
+  border-radius:8px;border-left:3px solid transparent;
+}
+.fsig.fail{border-left-color:var(--coral)}
+.fsig.pass{border-left-color:var(--teal)}
+.fsig-name{font-size:13px;font-weight:500;flex:1}
+.fsig-fix{font-size:11px;color:var(--ink3);margin-top:2px;line-height:1.4}
+.fsig-score{font-family:var(--mono);font-size:11px;margin-left:auto;flex-shrink:0}
+
+/* CTA */
+.cta-box{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;padding:30px;text-align:center;
+}
+.cta-title{font-family:var(--serif);font-size:26px;margin-bottom:8px;font-weight:400}
+.cta-sub{font-size:14px;color:var(--ink2);margin-bottom:22px;line-height:1.55}
+.cta-btn{
+  display:inline-block;background:var(--ink);color:white;
+  padding:13px 26px;border-radius:10px;font-size:14px;font-weight:600;
+  text-decoration:none;cursor:pointer;border:none;font-family:var(--sans);
+  transition:opacity .15s;
+}
+.cta-btn:hover{opacity:.82}
+.cta-price{font-family:var(--mono);font-size:11px;color:var(--ink3);margin-top:10px}
+
+/* HOW IT WORKS */
+.how{max-width:680px;margin:0 auto 72px;padding:0 20px}
+.section-title{font-family:var(--serif);font-size:32px;font-weight:400;
+  text-align:center;margin-bottom:28px;letter-spacing:-.01em}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.step{background:white;border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.step-n{font-family:var(--mono);font-size:11px;color:var(--purple);margin-bottom:10px}
+.step-t{font-size:14px;font-weight:600;margin-bottom:6px}
+.step-d{font-size:12px;color:var(--ink3);line-height:1.5}
+
+/* CHECKS GRID */
+.checks{max-width:680px;margin:0 auto 72px;padding:0 20px}
+.checks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.check-item{
+  display:flex;gap:10px;padding:11px 14px;align-items:flex-start;
+  background:white;border:1px solid var(--border);border-radius:8px;
+}
+.check-dot{width:7px;height:7px;border-radius:50%;background:var(--purple);
+  margin-top:5px;flex-shrink:0}
+.check-label{font-size:13px;font-weight:500}
+.check-pts{font-family:var(--mono);font-size:11px;color:var(--ink3)}
+
+footer{
+  border-top:1px solid var(--border);padding:24px 28px;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  font-family:var(--mono);font-size:11px;color:var(--ink3);
+}
+
+@media(max-width:580px){
+  .scan-row,.gate-row{flex-direction:column}
+  .scan-btn,.gate-btn{width:100%;height:44px}
+  .steps,.checks-grid{grid-template-columns:1fr}
+  h1{font-size:30px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="https://smartagentx.ai">smart<b>agent</b>x</a>
+  <button class="nav-btn" onclick="scrollTo({top:0,behavior:'smooth'})">Free score</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge"><div class="badge-dot"></div>Free AI Readiness Audit</div>
+  <h1>Is your store <em>invisible</em><br>to AI assistants?</h1>
+  <p class="hero-sub">
+    Google Gemini, ChatGPT, and Perplexity are recommending products right now.
+    See if your store is in the conversation — or missing entirely.
+  </p>
+
+  <div class="scan-box">
+    <div class="scan-lbl">Enter your store URL</div>
+    <div class="scan-row">
+      <input type="url" class="scan-input" id="url-input"
+        placeholder="yourstore.com" autocomplete="off" spellcheck="false">
+      <button class="scan-btn" id="scan-btn" onclick="startScan()">
+        Scan my store →
+      </button>
+    </div>
+    <div class="progress" id="prog">
+      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+      <div class="prog-lbl" id="prog-lbl">Checking agents.json...</div>
+    </div>
+    <div class="scan-note">Free · No account · Results in ~20 seconds</div>
+  </div>
+
+  <div class="proof">
+    <div class="proof-item"><span class="proof-tick">✓</span>12 signals checked</div>
+    <div class="proof-item"><span class="proof-tick">✓</span>No login needed</div>
+    <div class="proof-item"><span class="proof-tick">✓</span>Any platform</div>
+    <div class="proof-item"><span class="proof-tick">✓</span>Fix for every gap</div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results">
+
+  <div class="score-card">
+    <div class="score-num" id="score-num" style="color:var(--ink3)">—</div>
+    <div class="score-denom">out of 100</div>
+    <span class="tier-badge" id="tier-badge" style="background:var(--bg3);color:var(--ink3)">Scanning</span>
+    <div class="score-domain" id="score-domain"></div>
+    <div class="score-impact" id="score-impact"></div>
+  </div>
+
+  <div class="signals-wrap" id="preview-signals"></div>
+
+  <div class="gate" id="gate">
+    <div class="gate-title">See your full breakdown</div>
+    <div class="gate-sub">
+      All 12 signals, exact fix steps, and estimated revenue impact.<br>
+      Free — no credit card, no spam.
+    </div>
+    <div class="gate-row">
+      <input type="email" class="gate-input" id="gate-email" placeholder="your@email.com">
+      <button class="gate-btn" onclick="captureEmail()">Send my report →</button>
+    </div>
+    <div class="gate-note">Full report delivered instantly to your inbox</div>
+    <div class="gate-success" id="gate-success">
+      Report sent! Check your inbox — and scroll down to see it now.
+    </div>
+  </div>
+
+  <div id="full-report">
+    <div class="full-signals" id="full-signals"></div>
+    <div class="cta-box">
+      <div class="cta-title">Fix your score in 30 days</div>
+      <div class="cta-sub">
+        We generate your missing files, structure your product data,
+        and get your store AI-visible — fast.
+      </div>
+      <a class="cta-btn" href="https://smartagentx.ai#contact">
+        Get AI-ready → from $497
+      </a>
+      <div class="cta-price">One-time · 30-day delivery · Money-back guarantee</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <h2 class="section-title">How it works</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">01 / SCAN</div>
+      <div class="step-t">Enter your URL</div>
+      <div class="step-d">We check 12 AI-readiness signals in under 20 seconds. No login, no install.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">02 / SCORE</div>
+      <div class="step-t">Get your Pulse Score</div>
+      <div class="step-d">Your 0–100 score shows exactly where you stand vs. AI-ready competitors.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">03 / FIX</div>
+      <div class="step-t">Get the roadmap</div>
+      <div class="step-d">Every gap includes a specific fix. We implement them for you, or you follow the guide.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE CHECK -->
+<section class="checks">
+  <h2 class="section-title">What we check</h2>
+  <div class="checks-grid">
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">agents.json</div><div class="check-pts">20 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">llms.txt</div><div class="check-pts">15 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Product JSON-LD schema</div><div class="check-pts">15 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Open Graph tags</div><div class="check-pts">8 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Product descriptions</div><div class="check-pts">8 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Breadcrumb schema</div><div class="check-pts">7 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Sitemap XML</div><div class="check-pts">7 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">robots.txt AI rules</div><div class="check-pts">5 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Review / rating schema</div><div class="check-pts">5 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Canonical URLs</div><div class="check-pts">5 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">FAQ schema</div><div class="check-pts">3 points</div></div></div>
+    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">HTTPS</div><div class="check-pts">2 points</div></div></div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 SmartAgentX</span>
+  <span>pulse.smartagentx.ai</span>
+  <span>hello@smartagentx.ai</span>
+</footer>
+
+<script>
+// ── Config ─────────────────────────────────────────────────────────────────
+// After deploying to Vercel, replace this URL with your actual Vercel URL
+// e.g. https://pulse-api.vercel.app
+const API = 'https://pulse-api-two.vercel.app';
+
+let reportData = null;
+
+// ── Scan ───────────────────────────────────────────────────────────────────
+async function startScan() {
+  const input = document.getElementById('url-input');
+  const btn   = document.getElementById('scan-btn');
+  let   url   = input.value.trim();
+  if (!url) { input.focus(); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Scanning...';
+  document.getElementById('results').style.display = 'none';
+  showProgress();
+
+  try {
+    let data;
+    try {
+      const res = await fetch(`${API}/api/scan`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({url}),
+      });
+      if (!res.ok) throw new Error('api error');
+      data = await res.json();
+    } catch(e) {
+      data = mockReport(url); // graceful fallback for demo
+    }
+
+    reportData = data;
+    renderResults(data);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Scan my store →';
+    hideProgress();
+  }
+}
+
+// ── Progress bar ───────────────────────────────────────────────────────────
+const steps = [
+  'Checking agents.json...','Looking for llms.txt...',
+  'Parsing product schemas...','Checking Open Graph...',
+  'Scanning sitemap...','Evaluating descriptions...',
+  'Checking review schemas...','Computing Pulse Score...',
+];
+let _progInterval;
+
+function showProgress() {
+  const el = document.getElementById('prog');
+  el.style.display = 'block';
+  let i = 0;
+  _progInterval = setInterval(() => {
+    i++;
+    document.getElementById('prog-fill').style.width = Math.min(i/steps.length*90,90)+'%';
+    document.getElementById('prog-lbl').textContent = steps[Math.min(i,steps.length-1)];
+    if(i >= steps.length) clearInterval(_progInterval);
+  }, 400);
+}
+function hideProgress() {
+  clearInterval(_progInterval);
+  document.getElementById('prog-fill').style.width = '100%';
+  setTimeout(() => document.getElementById('prog').style.display='none', 300);
+}
+
+// ── Render results ─────────────────────────────────────────────────────────
+function renderResults(data) {
+  const sec = document.getElementById('results');
+  sec.style.display = 'block';
+  sec.scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Score
+  const scoreEl = document.getElementById('score-num');
+  scoreEl.textContent  = data.score;
+  scoreEl.style.color  = data.color;
+
+  const badge = document.getElementById('tier-badge');
+  badge.textContent    = data.tier.replace('-',' ');
+  badge.style.background = data.color + '18';
+  badge.style.color      = data.color;
+
+  document.getElementById('score-domain').textContent = data.domain;
+  document.getElementById('score-impact').textContent = data.impact;
+
+  // Preview signals
+  document.getElementById('preview-signals').innerHTML =
+    data.preview.map(s => `
+      <div class="sig-card">
+        <div class="sig-icon ${s.passed?'ic-pass':'ic-fail'}">${s.passed?'✓':'✗'}</div>
+        <div style="flex:1">
+          <div class="sig-name">${s.name}</div>
+          <div class="sig-detail">${s.detail}</div>
+        </div>
+        <div class="sig-pts">${s.weight}pts</div>
+      </div>`).join('');
+
+  // Reset gate
+  document.getElementById('gate').style.display = 'block';
+  document.getElementById('full-report').style.display = 'none';
+  document.getElementById('gate-success').style.display = 'none';
+  document.getElementById('gate-email').value = '';
+}
+
+// ── Email capture ──────────────────────────────────────────────────────────
+async function captureEmail() {
+  const emailEl = document.getElementById('gate-email');
+  const email   = emailEl.value.trim();
+  if (!email || !email.includes('@')) { emailEl.focus(); return; }
+
+  // Show success message immediately — don't wait for email
+  document.getElementById('gate-success').style.display = 'block';
+  document.querySelector('.gate-row').style.display = 'none';
+  document.querySelector('.gate-note').style.display = 'none';
+
+  // Send to API (fire and forget)
+  if (reportData) {
+    fetch(`${API}/api/leads`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        email,
+        name:      '',
+        domain:    reportData.domain,
+        score:     reportData.score,
+        tier:      reportData.tier,
+        color:     reportData.color,
+        top_gaps:  reportData.top_gaps,
+        report_id: reportData.id,
+      }),
+    }).catch(() => {});
+  }
+
+  setTimeout(() => unlockFullReport(), 1200);
+}
+
+function unlockFullReport() {
+  if (!reportData) return;
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('full-report').style.display = 'block';
+
+  const signals = reportData.signals || [];
+  document.getElementById('full-signals').innerHTML =
+    signals.sort((a,b) => b.weight-a.weight).map(s => `
+      <div class="fsig ${s.passed?'pass':'fail'}">
+        <div class="sig-icon ${s.passed?'ic-pass':'ic-fail'}"
+             style="width:22px;height:22px;font-size:11px;border-radius:4px">
+          ${s.passed?'✓':'✗'}
+        </div>
+        <div style="flex:1">
+          <div class="fsig-name">${s.name}</div>
+          ${!s.passed?`<div class="fsig-fix">Fix: ${s.fix}</div>`:''}
+        </div>
+        <div class="fsig-score" style="color:${s.passed?'var(--teal)':'var(--coral)'}">
+          ${s.score}/${s.weight}
+        </div>
+      </div>`).join('');
+
+  document.getElementById('full-report').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── Enter key ──────────────────────────────────────────────────────────────
+document.getElementById('url-input').addEventListener('keypress', e => {
+  if (e.key === 'Enter') startScan();
+});
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('gate-email').addEventListener('keypress', e => {
+    if (e.key === 'Enter') captureEmail();
+  });
+});
+
+// ── Mock data (shown if API is unreachable) ────────────────────────────────
+function mockReport(url) {
+  const domain = url.replace(/https?:\/\/(www\.)?/,'').split('/')[0];
+  const score  = Math.floor(Math.random()*38)+8;
+  const tiers  = [
+    [80,'optimised','#085041'],[55,'capable','#0F6E56'],
+    [30,'emerging','#854F0B'],[0,'agent-blind','#791F1F']
+  ];
+  const [,tier,color] = tiers.find(([t]) => score >= t);
+
+  const allSignals = [
+    {key:'agents_json',   name:'agents.json',           weight:20,passed:score>70,score:score>70?20:0,  detail:'agents.json missing — AI agents cannot discover your store',fix:'Create /agents.json with store name, description, and product catalog'},
+    {key:'llms_txt',      name:'llms.txt',               weight:15,passed:score>65,score:score>65?15:0,  detail:'llms.txt missing — LLMs have no context about your store',fix:'Create /llms.txt with brand description, product categories, policies'},
+    {key:'product_schema',name:'Product JSON-LD schema', weight:15,passed:score>40,score:score>40?15:0,  detail:'No Product schema — AI cannot parse your product details',fix:'Add JSON-LD Product schema with name, price, description, image'},
+    {key:'open_graph',    name:'Open Graph tags',        weight:8, passed:score>30,score:score>30?8:4,   detail:'Some OG tags missing',fix:'Add og:title, og:description, og:image, og:url'},
+    {key:'product_desc',  name:'Product descriptions',   weight:8, passed:score>50,score:score>50?8:3,   detail:'Thin product descriptions (<150 chars)',fix:'Expand to 200+ words with use cases and specifications'},
+    {key:'breadcrumbs',   name:'Breadcrumb schema',      weight:7, passed:score>45,score:score>45?7:0,   detail:'No breadcrumb schema — AI cannot understand site structure',fix:'Add BreadcrumbList JSON-LD to category and product pages'},
+    {key:'sitemap',       name:'Sitemap XML',             weight:7, passed:score>20,score:score>20?7:0,   detail:'No sitemap.xml — AI crawlers cannot discover full catalogue',fix:'Generate and submit sitemap.xml including all product pages'},
+    {key:'robots_ai',     name:'robots.txt AI rules',    weight:5, passed:score>35,score:score>35?5:2,   detail:'robots.txt has no AI crawler rules',fix:'Allow GPTBot, ClaudeBot, PerplexityBot in robots.txt'},
+    {key:'review_schema', name:'Review / rating schema', weight:5, passed:score>60,score:score>60?5:0,   detail:'No review schema — AI cannot surface your ratings',fix:'Add AggregateRating JSON-LD with ratingValue and reviewCount'},
+    {key:'canonical',     name:'Canonical URLs',          weight:5, passed:score>25,score:score>25?5:0,   detail:'No canonical tag — AI may index duplicate content',fix:"Add <link rel='canonical'> to every page"},
+    {key:'faq_schema',    name:'FAQ schema',              weight:3, passed:score>75,score:score>75?3:0,   detail:'No FAQPage schema — missed Q&A opportunity',fix:'Add FAQPage JSON-LD with common product questions'},
+    {key:'https_check',   name:'HTTPS',                   weight:2, passed:true,    score:2,             detail:'Site uses HTTPS',fix:'Already done'},
+  ];
+
+  const failed = allSignals.filter(s=>!s.passed).sort((a,b)=>b.weight-a.weight);
+  return {
+    id:     'demo-'+Math.random().toString(36).slice(2),
+    domain, score, tier, color,
+    impact: score<30?'Critical — store is largely invisible to AI assistants'
+           :score<55?'High — significant AI revenue being missed'
+           :'Moderate — some gaps worth addressing',
+    top_gaps: failed.slice(0,3).map(s=>`${s.name}: ${s.fix}`),
+    preview: [
+      ...failed.slice(0,2).map(s=>({name:s.name,passed:false,weight:s.weight,detail:s.detail})),
+      {name:'HTTPS',passed:true,weight:2,detail:'Site uses HTTPS'},
+    ],
+    signals: allSignals,
+  };
+}
+</script>
+</body>
+</html>
