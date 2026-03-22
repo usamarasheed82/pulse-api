@@ -6,400 +6,576 @@
 <title>Agentic Pulse Score — Is your store invisible to AI? | SmartAgentX</title>
 <meta name="description" content="Free AI readiness audit for your online store. Find out if Google Gemini, ChatGPT, and Perplexity can find and recommend your products.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#0f0e0c;--ink2:#3a3935;--ink3:#7a7873;--ink4:#b0ada8;
-  --bg:#f9f7f3;--bg2:#f0ede6;--bg3:#e6e2d9;
-  --border:rgba(15,14,12,.09);
-  --purple:#534AB7;--purple-l:#EEEDFE;--purple-d:#3C3489;
-  --teal:#0F6E56;--teal-l:#E1F5EE;
-  --coral:#D85A30;--coral-l:#FAECE7;
-  --amber:#BA7517;--amber-l:#FAEEDA;
-  --red:#A32D2D;--red-l:#FCEBEB;
-  --green:#27500A;--green-l:#EAF3DE;
-  --serif:'Instrument Serif',Georgia,serif;
-  --sans:'DM Sans',system-ui,sans-serif;
+  --accent:#00D4AA;
+  --accent-dim:rgba(0,212,170,0.09);
+  --accent-border:rgba(0,212,170,0.28);
+  --red:#E24B4A;
+  --red-dim:rgba(226,75,74,0.10);
+  --amber:#F5A623;
+  --amber-dim:rgba(245,166,35,0.10);
+  --blue:#3B7BF5;
+  --ink:#08080E;
+  --ink2:#111118;
+  --ink3:#1C1C28;
+  --line:rgba(255,255,255,0.07);
+  --line2:rgba(255,255,255,0.12);
+  --muted:#7A7A8E;
+  --subtle:#AEAEC0;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Figtree',sans-serif;
   --mono:'DM Mono',monospace;
-  --r:12px;--r-lg:18px;
 }
 html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+body{font-family:var(--sans);background:var(--ink);color:#fff;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
 /* NAV */
-nav{
-  position:sticky;top:0;z-index:100;
-  background:rgba(249,247,243,.92);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--border);
-  height:54px;padding:0 28px;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.brand{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink);text-decoration:none}
-.brand b{color:var(--purple)}
-.nav-btn{
-  font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;
-  border:1px solid var(--border);background:none;color:var(--ink);
-  cursor:pointer;font-family:var(--sans);transition:background .15s;
-}
-.nav-btn:hover{background:var(--bg2)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(8,8,14,0.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.nav-logo{font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:-0.02em;color:#fff;text-decoration:none}
+.nav-logo span{color:var(--accent)}
+.nav-actions{display:flex;align-items:center;gap:14px}
+.nav-link{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-link:hover{color:#fff}
+.nav-btn{font-size:13px;font-weight:600;padding:8px 18px;border-radius:6px;border:none;background:var(--accent);color:var(--ink);cursor:pointer;font-family:var(--sans);transition:opacity .2s;white-space:nowrap}
+.nav-btn:hover{opacity:.88}
 
 /* HERO */
-.hero{max-width:720px;margin:0 auto;padding:72px 24px 56px;text-align:center}
-.badge{
-  display:inline-flex;align-items:center;gap:6px;
-  font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.07em;
-  color:var(--purple);background:var(--purple-l);
-  padding:4px 12px;border-radius:20px;margin-bottom:22px;
-}
-.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--purple);animation:blink 2s ease infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.hero{min-height:100vh;padding:120px 2rem 100px;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 55% at 50% 0%,black 0%,transparent 100%)}
+.hero-glow{position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,170,0.08) 0%,transparent 70%);top:-240px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-inner{max-width:700px;width:100%;text-align:center;position:relative;z-index:1}
+.eyebrow-pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);padding:5px 14px;border-radius:100px;margin-bottom:1.75rem}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+h1{font-family:var(--serif);font-size:clamp(38px,5.6vw,68px);font-weight:400;line-height:1.05;letter-spacing:-0.025em;color:#fff;margin-bottom:1.25rem}
+h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:17px;color:var(--muted);line-height:1.75;font-weight:300;max-width:520px;margin:0 auto 2rem}
 
-h1{
-  font-family:var(--serif);font-size:clamp(34px,5.5vw,58px);
-  font-weight:400;line-height:1.1;letter-spacing:-.02em;
-  color:var(--ink);margin-bottom:18px;
-}
-h1 em{font-style:italic;color:var(--purple)}
-.hero-sub{font-size:16px;color:var(--ink2);line-height:1.7;max-width:500px;margin:0 auto 38px}
+/* URGENCY STRIP */
+.urgency-strip{display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--amber);background:var(--amber-dim);border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:8px 16px;margin-bottom:2rem;max-width:560px;width:100%}
 
 /* SCAN BOX */
-.scan-box{
-  background:var(--ink);border-radius:16px;
-  padding:26px 26px 20px;max-width:580px;margin:0 auto 14px;
-}
-.scan-lbl{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.35);
-  letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}
+.scan-box{background:var(--ink3);border:1px solid var(--line2);border-radius:16px;padding:28px 28px 22px;max-width:580px;width:100%;margin:0 auto 16px;position:relative;overflow:hidden}
+.scan-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.scan-lbl{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:12px}
 .scan-row{display:flex;gap:8px}
-.scan-input{
-  flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
-  border-radius:9px;height:48px;padding:0 16px;font-size:15px;
-  font-family:var(--sans);color:white;outline:none;transition:border-color .15s;
-}
-.scan-input::placeholder{color:rgba(255,255,255,.28)}
-.scan-input:focus{border-color:rgba(255,255,255,.38)}
-.scan-btn{
-  background:white;color:var(--ink);border:none;border-radius:9px;
-  height:48px;padding:0 22px;font-size:14px;font-weight:600;
-  cursor:pointer;white-space:nowrap;font-family:var(--sans);
-  transition:opacity .15s,transform .1s;
-}
+.scan-input{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);border-radius:8px;height:50px;padding:0 16px;font-size:15px;font-family:var(--sans);color:#fff;outline:none;transition:border-color .2s,background .2s}
+.scan-input::placeholder{color:rgba(255,255,255,0.22)}
+.scan-input:focus{border-color:var(--accent-border);background:rgba(0,212,170,0.03)}
+.scan-btn{background:var(--accent);color:var(--ink);border:none;border-radius:8px;height:50px;padding:0 24px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--sans);transition:opacity .2s,transform .1s}
 .scan-btn:hover{opacity:.88}
 .scan-btn:active{transform:scale(.97)}
 .scan-btn:disabled{opacity:.45;cursor:wait}
-.scan-note{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.25);margin-top:10px}
-
-/* PROGRESS */
+.scan-note{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.18);margin-top:12px}
 .progress{display:none;margin-top:16px}
-.prog-track{height:2px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;background:white;border-radius:2px;width:0%;transition:width .5s ease}
-.prog-lbl{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.38);margin-top:8px}
+.prog-track{height:2px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .5s ease}
+.prog-lbl{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px}
 
 /* PROOF */
-.proof{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;
-  max-width:500px;margin:0 auto 64px;padding:0 24px}
-.proof-item{font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:5px}
-.proof-tick{color:var(--teal);font-size:14px}
+.proof{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;max-width:520px;margin:0 auto}
+.proof-item{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.proof-tick{color:var(--accent);font-size:13px}
+
+/* CHANNELS BAR */
+.channels-bar{padding:1.75rem 2rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink2)}
+.channels-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center}
+.channel-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);white-space:nowrap;margin-right:2rem}
+.channel-items{display:flex;align-items:center;flex-wrap:wrap}
+.channel-item{font-family:var(--mono);font-size:11.5px;color:rgba(255,255,255,0.18);letter-spacing:0.04em;font-weight:500;text-transform:uppercase;padding:10px 18px;border-right:1px solid var(--line)}
+.channel-item:last-child{border-right:none}
 
 /* RESULTS */
-#results{display:none;max-width:640px;margin:0 auto 80px;padding:0 20px}
-
-.score-card{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:16px;padding:34px;text-align:center;margin-bottom:16px;
-}
-.score-num{
-  font-family:var(--serif);font-size:96px;line-height:1;
-  font-weight:400;margin-bottom:4px;transition:color .4s;
-}
-.score-denom{font-size:13px;color:var(--ink3);margin-bottom:12px}
-.tier-badge{
-  display:inline-block;font-family:var(--mono);font-size:11px;font-weight:500;
-  padding:4px 14px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;
-}
-.score-domain{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-top:10px}
-.score-impact{font-size:14px;color:var(--ink2);margin-top:12px;line-height:1.55}
-
-/* Signal cards */
-.signals-wrap{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
-.sig-card{
-  display:flex;align-items:flex-start;gap:12px;
-  background:white;border:1px solid var(--border);
-  border-radius:10px;padding:13px 15px;
-}
-.sig-icon{
-  width:26px;height:26px;border-radius:6px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
-}
-.ic-pass{background:var(--green-l);color:var(--green)}
-.ic-fail{background:var(--red-l);color:var(--red)}
-.sig-name{font-size:13px;font-weight:500;margin-bottom:2px}
-.sig-detail{font-size:12px;color:var(--ink3);line-height:1.4}
-.sig-pts{font-family:var(--mono);font-size:11px;color:var(--ink4);margin-left:auto;flex-shrink:0;padding-top:2px}
-
-/* GATE */
-.gate{
-  background:var(--ink);border-radius:16px;padding:30px;
-  text-align:center;margin-bottom:16px;position:relative;overflow:hidden;
-}
-.gate::before{
-  content:'';position:absolute;top:-50px;right:-50px;
-  width:160px;height:160px;border-radius:50%;
-  background:rgba(83,74,183,.12);
-}
-.gate-title{font-family:var(--serif);font-size:24px;color:white;
-  font-weight:400;margin-bottom:8px}
-.gate-sub{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:22px;line-height:1.55}
-.gate-row{display:flex;gap:8px;max-width:400px;margin:0 auto}
-.gate-input{
-  flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
-  border-radius:8px;height:44px;padding:0 14px;font-size:14px;
-  font-family:var(--sans);color:white;outline:none;
-}
-.gate-input::placeholder{color:rgba(255,255,255,.3)}
-.gate-input:focus{border-color:rgba(255,255,255,.38)}
-.gate-btn{
-  background:white;color:var(--ink);border:none;border-radius:8px;
-  height:44px;padding:0 18px;font-size:13px;font-weight:600;
-  cursor:pointer;white-space:nowrap;font-family:var(--sans);transition:opacity .15s;
-}
+#results{display:none;background:var(--ink2);padding-bottom:4rem}
+.results-inner{max-width:660px;margin:0 auto;padding:3rem 20px 0}
+.score-card{background:var(--ink3);border:1px solid var(--line2);border-radius:16px;padding:36px;text-align:center;margin-bottom:10px;position:relative;overflow:hidden}
+.score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.score-num{font-family:var(--mono);font-size:88px;font-weight:500;line-height:1;margin-bottom:4px;transition:color .4s}
+.score-denom{font-size:13px;color:var(--muted);margin-bottom:14px}
+.tier-badge{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:500;padding:4px 14px;border-radius:20px;letter-spacing:.08em;text-transform:uppercase}
+.score-domain{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px}
+.score-impact{font-size:14px;color:var(--subtle);margin-top:10px;line-height:1.55}
+.signals-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.sig-card{display:flex;align-items:flex-start;gap:12px;background:var(--ink3);border:1px solid var(--line);border-radius:10px;padding:13px 15px;transition:background .2s}
+.sig-card:hover{background:rgba(255,255,255,.02)}
+.sig-icon{width:26px;height:26px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.ic-pass{background:rgba(0,212,170,0.1);color:var(--accent)}
+.ic-fail{background:var(--red-dim);color:var(--red)}
+.sig-name{font-size:13px;font-weight:500;color:#fff;margin-bottom:2px}
+.sig-detail{font-size:12px;color:var(--muted);line-height:1.4}
+.sig-pts{font-family:var(--mono);font-size:11px;color:var(--subtle);margin-left:auto;flex-shrink:0;padding-top:2px}
+.gate{background:var(--ink3);border:1px solid var(--line2);border-radius:16px;padding:32px;text-align:center;margin-bottom:10px;position:relative;overflow:hidden}
+.gate::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,170,.5),transparent)}
+.gate-title{font-family:var(--serif);font-size:26px;color:#fff;font-weight:400;margin-bottom:8px}
+.gate-sub{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+.gate-row{display:flex;gap:8px;max-width:420px;margin:0 auto}
+.gate-input{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;height:46px;padding:0 14px;font-size:14px;font-family:var(--sans);color:#fff;outline:none;transition:border-color .2s}
+.gate-input::placeholder{color:rgba(255,255,255,.28)}
+.gate-input:focus{border-color:var(--accent-border)}
+.gate-btn{background:var(--accent);color:var(--ink);border:none;border-radius:8px;height:46px;padding:0 20px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--sans);transition:opacity .2s}
 .gate-btn:hover{opacity:.88}
-.gate-note{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.25);margin-top:10px}
-.gate-success{display:none;font-size:14px;color:rgba(255,255,255,.75);padding:10px 0}
-
-/* Full signals */
+.gate-note{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.20);margin-top:10px}
+.gate-success{display:none;font-size:14px;color:var(--accent);padding:10px 0}
 #full-report{display:none}
-.full-signals{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.fsig{
-  display:flex;align-items:center;gap:10px;
-  padding:11px 14px;background:white;border:1px solid var(--border);
-  border-radius:8px;border-left:3px solid transparent;
-}
-.fsig.fail{border-left-color:var(--coral)}
-.fsig.pass{border-left-color:var(--teal)}
-.fsig-name{font-size:13px;font-weight:500;flex:1}
-.fsig-fix{font-size:11px;color:var(--ink3);margin-top:2px;line-height:1.4}
+.full-signals{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.fsig{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--ink3);border:1px solid var(--line);border-radius:8px;border-left:3px solid transparent;transition:background .2s}
+.fsig:hover{background:rgba(255,255,255,.02)}
+.fsig.fail{border-left-color:var(--red)}
+.fsig.pass{border-left-color:var(--accent)}
+.fsig-name{font-size:13px;font-weight:500;color:#fff;flex:1}
+.fsig-fix{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
 .fsig-score{font-family:var(--mono);font-size:11px;margin-left:auto;flex-shrink:0}
+.cta-box{background:var(--ink3);border:1px solid var(--line2);border-radius:16px;padding:36px;text-align:center;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+.cta-title{font-family:var(--serif);font-size:28px;margin-bottom:8px;font-weight:400;color:#fff}
+.cta-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.65;max-width:420px;margin-left:auto;margin-right:auto}
+.cta-btn{display:inline-block;background:var(--accent);color:var(--ink);padding:13px 28px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;border:none;font-family:var(--sans);transition:opacity .2s,transform .1s}
+.cta-btn:hover{opacity:.88;transform:translateY(-1px)}
+.cta-price{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:12px}
 
-/* CTA */
-.cta-box{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:16px;padding:30px;text-align:center;
-}
-.cta-title{font-family:var(--serif);font-size:26px;margin-bottom:8px;font-weight:400}
-.cta-sub{font-size:14px;color:var(--ink2);margin-bottom:22px;line-height:1.55}
-.cta-btn{
-  display:inline-block;background:var(--ink);color:white;
-  padding:13px 26px;border-radius:10px;font-size:14px;font-weight:600;
-  text-decoration:none;cursor:pointer;border:none;font-family:var(--sans);
-  transition:opacity .15s;
-}
-.cta-btn:hover{opacity:.82}
-.cta-price{font-family:var(--mono);font-size:11px;color:var(--ink3);margin-top:10px}
+/* SHARED SECTION STYLES */
+.section-wrap{padding:6rem 2rem}
+.section-inner{max-width:1060px;margin:0 auto}
+.section-inner-narrow{max-width:820px;margin:0 auto}
+.s-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.s-eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--accent)}
+h2{font-family:var(--serif);font-size:clamp(30px,3.8vw,50px);font-weight:400;line-height:1.1;letter-spacing:-0.02em;color:#fff;margin-bottom:1rem}
+h2 em{font-style:italic;color:var(--accent)}
+.section-lead{font-size:16px;color:var(--muted);line-height:1.7;max-width:560px;font-weight:300;margin-bottom:3rem}
+.btn-accent{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;background:var(--accent);color:var(--ink);border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;border:none;cursor:pointer;font-family:var(--sans);transition:opacity .2s,transform .1s}
+.btn-accent:hover{opacity:.88;transform:translateY(-1px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:1px solid var(--line2);color:#fff;border-radius:8px;font-size:14px;text-decoration:none;transition:all .2s;font-family:var(--sans)}
+.btn-ghost:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
 
-/* HOW IT WORKS */
-.how{max-width:680px;margin:0 auto 72px;padding:0 20px}
-.section-title{font-family:var(--serif);font-size:32px;font-weight:400;
-  text-align:center;margin-bottom:28px;letter-spacing:-.01em}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.step{background:white;border:1px solid var(--border);border-radius:var(--r);padding:20px}
-.step-n{font-family:var(--mono);font-size:11px;color:var(--purple);margin-bottom:10px}
-.step-t{font-size:14px;font-weight:600;margin-bottom:6px}
-.step-d{font-size:12px;color:var(--ink3);line-height:1.5}
+/* SEGMENT SECTION */
+.segment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.seg-card{background:var(--ink);padding:2rem;transition:background .2s;position:relative}
+.seg-card:hover{background:rgba(255,255,255,.02)}
+.seg-tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:1.25rem;font-weight:500}
+.seg-a .seg-tag{background:var(--red-dim);color:var(--red);border:1px solid rgba(226,75,74,.2)}
+.seg-b .seg-tag{background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-border)}
+.seg-c .seg-tag{background:rgba(59,123,245,0.10);color:var(--blue);border:1px solid rgba(59,123,245,0.25)}
+.seg-rev{font-family:var(--mono);font-size:11px;color:var(--subtle);margin-bottom:.75rem}
+.seg-card h3{font-family:var(--serif);font-size:22px;font-weight:400;color:#fff;margin-bottom:.75rem}
+.seg-pain{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:1.25rem}
+.seg-divider{border:none;border-top:1px solid var(--line);margin:1.25rem 0}
+.seg-next{font-size:12px;color:var(--subtle);display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.seg-next strong{color:var(--accent);font-weight:500}
 
-/* CHECKS GRID */
-.checks{max-width:680px;margin:0 auto 72px;padding:0 20px}
-.checks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
-.check-item{
-  display:flex;gap:10px;padding:11px 14px;align-items:flex-start;
-  background:white;border:1px solid var(--border);border-radius:8px;
-}
-.check-dot{width:7px;height:7px;border-radius:50%;background:var(--purple);
-  margin-top:5px;flex-shrink:0}
-.check-label{font-size:13px;font-weight:500}
-.check-pts{font-family:var(--mono);font-size:11px;color:var(--ink3)}
+/* LADDER */
+.ladder{margin-top:2.5rem;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.ladder-row{display:grid;grid-template-columns:72px 1fr auto;align-items:center;padding:1.25rem 1.5rem;border-bottom:1px solid var(--line);gap:1.5rem;transition:background .2s}
+.ladder-row:last-child{border-bottom:none}
+.ladder-row:hover{background:rgba(255,255,255,.02)}
+.ladder-row.featured{background:rgba(0,212,170,0.04);border-color:rgba(0,212,170,0.12)}
+.ladder-stage{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.ladder-row.featured .ladder-stage{color:var(--accent)}
+.ladder-name{font-size:15px;font-weight:600;color:#fff;margin-bottom:3px}
+.ladder-desc{font-size:12.5px;color:var(--muted);line-height:1.45}
+.ladder-here{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:100px;background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-border);margin-top:6px;letter-spacing:.06em}
+.ladder-price{font-family:var(--mono);font-size:13px;font-weight:500;white-space:nowrap;text-align:right;color:var(--subtle)}
+.ladder-price.free{color:var(--accent)}
 
-footer{
-  border-top:1px solid var(--border);padding:24px 28px;
-  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
-  font-family:var(--mono);font-size:11px;color:var(--ink3);
-}
+/* COMPARE */
+.compare-table{margin-top:2.5rem;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.compare-head{display:grid;grid-template-columns:1fr repeat(3,110px);background:var(--ink3);padding:1rem 1.5rem;border-bottom:1px solid var(--line);gap:1rem}
+.compare-head-cell{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.10em;color:var(--muted);text-align:center}
+.compare-head-cell:first-child{text-align:left;color:var(--subtle)}
+.compare-head-cell.ours{color:var(--accent)}
+.compare-row{display:grid;grid-template-columns:1fr repeat(3,110px);padding:1rem 1.5rem;border-bottom:1px solid var(--line);align-items:center;gap:1rem;transition:background .2s}
+.compare-row:last-child{border-bottom:none}
+.compare-row:hover{background:rgba(255,255,255,.015)}
+.compare-label{font-size:14px;color:#fff;font-weight:500}
+.compare-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.compare-cell{text-align:center;font-family:var(--mono);font-size:13px}
+.c-yes{color:var(--accent)}
+.c-no{color:rgba(226,75,74,.65)}
+.c-partial{color:var(--amber)}
 
-@media(max-width:580px){
+/* FINAL CTA */
+.final-section{padding:7rem 2rem;text-align:center;position:relative;overflow:hidden}
+.final-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,170,0.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.final-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1rem}
+.final-eyebrow::before,.final-eyebrow::after{content:'';display:block;width:20px;height:1px;background:var(--accent)}
+.final-h{font-family:var(--serif);font-size:clamp(32px,4vw,56px);font-weight:400;line-height:1.08;letter-spacing:-0.02em;color:#fff;margin-bottom:1rem}
+.final-h em{font-style:italic;color:var(--accent)}
+.final-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:480px;margin:0 auto 2.5rem;font-weight:300}
+.final-ctas{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.final-note{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:1.5rem}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:24px 2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--ink2)}
+footer a{color:var(--muted);text-decoration:none;transition:color .2s}
+footer a:hover{color:var(--accent)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:720px){
+  .segment-grid{grid-template-columns:1fr}
   .scan-row,.gate-row{flex-direction:column}
-  .scan-btn,.gate-btn{width:100%;height:44px}
-  .steps,.checks-grid{grid-template-columns:1fr}
-  h1{font-size:30px}
+  .scan-btn,.gate-btn{width:100%;height:46px}
+  h1{font-size:34px}
+  .compare-head,.compare-row{grid-template-columns:1fr repeat(3,72px);gap:.5rem;padding:.875rem 1rem;font-size:12px}
+  .ladder-row{grid-template-columns:56px 1fr auto;gap:1rem}
+  .channel-label{display:none}
 }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-  <a class="brand" href="https://smartagentx.ai">smart<b>agent</b>x</a>
-  <button class="nav-btn" onclick="scrollTo({top:0,behavior:'smooth'})">Free score</button>
+  <a class="nav-logo" href="https://smartagentx.ai">SmartAgent<span>X</span></a>
+  <div class="nav-actions">
+    <a class="nav-link" href="https://smartagentx.ai" style="display:none" id="nav-services-link">Services</a>
+    <button class="nav-btn" onclick="document.getElementById('url-input').focus();window.scrollTo({top:0,behavior:'smooth'})">Run free audit</button>
+  </div>
 </nav>
 
-<!-- HERO -->
+<!-- ── HERO ── -->
 <section class="hero">
-  <div class="badge"><div class="badge-dot"></div>Free AI Readiness Audit</div>
-  <h1>Is your store <em>invisible</em><br>to AI assistants?</h1>
-  <p class="hero-sub">
-    Google Gemini, ChatGPT, and Perplexity are recommending products right now.
-    See if your store is in the conversation — or missing entirely.
-  </p>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
 
-  <div class="scan-box">
-    <div class="scan-lbl">Enter your store URL</div>
-    <div class="scan-row">
-      <input type="url" class="scan-input" id="url-input"
-        placeholder="yourstore.com" autocomplete="off" spellcheck="false">
-      <button class="scan-btn" id="scan-btn" onclick="startScan()">
-        Scan my store →
-      </button>
+    <div class="eyebrow-pill reveal">
+      <div class="pulse-dot"></div>
+      Free AI Commerce Readiness Audit
     </div>
-    <div class="progress" id="prog">
-      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
-      <div class="prog-lbl" id="prog-lbl">Checking agents.json...</div>
-    </div>
-    <div class="scan-note">Free · No account · Results in ~20 seconds</div>
-  </div>
 
-  <div class="proof">
-    <div class="proof-item"><span class="proof-tick">✓</span>12 signals checked</div>
-    <div class="proof-item"><span class="proof-tick">✓</span>No login needed</div>
-    <div class="proof-item"><span class="proof-tick">✓</span>Any platform</div>
-    <div class="proof-item"><span class="proof-tick">✓</span>Fix for every gap</div>
+    <h1 class="reveal">
+      Is your store <em>invisible</em><br>to AI assistants?
+    </h1>
+
+    <p class="hero-sub reveal">
+      ChatGPT Shopping, Perplexity, and Google AI Overviews are recommending products right now.
+      Find out if your store makes the list — or why it doesn't.
+    </p>
+
+    <div class="urgency-strip reveal">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><circle cx="7" cy="7" r="6" stroke="#F5A623" stroke-opacity=".5" stroke-width="1.5"/><path d="M7 4v3L8.5 9" stroke="#F5A623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      The first-mover window in your category is ~12 months. Brands building AI infrastructure now get a 2-year head start.
+    </div>
+
+    <div class="scan-box reveal">
+      <div class="scan-lbl">Enter your store URL to get your Pulse Score</div>
+      <div class="scan-row">
+        <input type="url" class="scan-input" id="url-input"
+          placeholder="yourstore.com" autocomplete="off" spellcheck="false">
+        <button class="scan-btn" id="scan-btn" onclick="startScan()">
+          Scan my store →
+        </button>
+      </div>
+      <div class="progress" id="prog">
+        <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+        <div class="prog-lbl" id="prog-lbl">Checking agents.json...</div>
+      </div>
+      <div class="scan-note">Free · No login · 12 signals · Results in ~20 seconds</div>
+    </div>
+
+    <div class="proof reveal">
+      <div class="proof-item"><span class="proof-tick">✓</span>Score out of 100</div>
+      <div class="proof-item"><span class="proof-tick">✓</span>Competitor benchmark</div>
+      <div class="proof-item"><span class="proof-tick">✓</span>Fix for every gap</div>
+      <div class="proof-item"><span class="proof-tick">✓</span>Any platform</div>
+    </div>
+
   </div>
 </section>
 
 <!-- RESULTS -->
-<section id="results">
-
-  <div class="score-card">
-    <div class="score-num" id="score-num" style="color:var(--ink3)">—</div>
-    <div class="score-denom">out of 100</div>
-    <span class="tier-badge" id="tier-badge" style="background:var(--bg3);color:var(--ink3)">Scanning</span>
-    <div class="score-domain" id="score-domain"></div>
-    <div class="score-impact" id="score-impact"></div>
-  </div>
-
-  <div class="signals-wrap" id="preview-signals"></div>
-
-  <div class="gate" id="gate">
-    <div class="gate-title">See your full breakdown</div>
-    <div class="gate-sub">
-      All 12 signals, exact fix steps, and estimated revenue impact.<br>
-      Free — no credit card, no spam.
+<div id="results" style="background:var(--ink2);padding-bottom:4rem">
+  <div class="results-inner">
+    <div class="score-card">
+      <div class="score-num" id="score-num" style="color:var(--muted)">—</div>
+      <div class="score-denom">out of 100</div>
+      <span class="tier-badge" id="tier-badge" style="background:rgba(255,255,255,.06);color:var(--muted)">Awaiting scan</span>
+      <div class="score-domain" id="score-domain"></div>
+      <div class="score-impact" id="score-impact"></div>
     </div>
-    <div class="gate-row">
-      <input type="email" class="gate-input" id="gate-email" placeholder="your@email.com">
-      <button class="gate-btn" onclick="captureEmail()">Send my report →</button>
-    </div>
-    <div class="gate-note">Full report delivered instantly to your inbox</div>
-    <div class="gate-success" id="gate-success">
-      Report sent! Check your inbox — and scroll down to see it now.
-    </div>
-  </div>
-
-  <div id="full-report">
-    <div class="full-signals" id="full-signals"></div>
-    <div class="cta-box">
-      <div class="cta-title">Fix your score in 30 days</div>
-      <div class="cta-sub">
-        We generate your missing files, structure your product data,
-        and get your store AI-visible — fast.
+    <div class="signals-wrap" id="preview-signals"></div>
+    <div class="gate" id="gate">
+      <div class="gate-title">See your full 12-signal breakdown</div>
+      <div class="gate-sub">Every gap, every fix, your estimated missed AI revenue.<br>Free — no credit card, no spam.</div>
+      <div class="gate-row">
+        <input type="email" class="gate-input" id="gate-email" placeholder="your@email.com">
+        <button class="gate-btn" onclick="captureEmail()">Unlock report →</button>
       </div>
-      <a class="cta-btn" href="https://smartagentx.ai#contact">
-        Get AI-ready → from $497
-      </a>
-      <div class="cta-price">One-time · 30-day delivery · Money-back guarantee</div>
+      <div class="gate-note">Full report unlocked instantly — delivered to your inbox too</div>
+      <div class="gate-success" id="gate-success">✓ Sent! Check your inbox — scroll down for your full report.</div>
+    </div>
+    <div id="full-report">
+      <div class="full-signals" id="full-signals"></div>
+      <div class="cta-box">
+        <div class="cta-title">Fix your score in 30 days</div>
+        <div class="cta-sub">Done-for-you: we generate missing files, structure your product data, and make your store visible to every AI channel.</div>
+        <a class="cta-btn" href="https://smartagentx.ai#contact">Get AI-ready → from $497</a>
+        <div class="cta-price">One-time · 30-day delivery · Money-back guarantee</div>
+      </div>
     </div>
   </div>
+</div>
 
-</section>
+<!-- AI CHANNELS BAR -->
+<div class="channels-bar">
+  <div class="channels-inner">
+    <div class="channel-label">Channels we optimise for</div>
+    <div class="channel-items">
+      <div class="channel-item">ChatGPT Shopping</div>
+      <div class="channel-item">Perplexity</div>
+      <div class="channel-item">Google AI Overviews</div>
+      <div class="channel-item">Amazon Rufus</div>
+      <div class="channel-item">Claude</div>
+      <div class="channel-item">Gemini</div>
+    </div>
+  </div>
+</div>
 
-<!-- HOW IT WORKS -->
-<section class="how">
-  <h2 class="section-title">How it works</h2>
-  <div class="steps">
-    <div class="step">
-      <div class="step-n">01 / SCAN</div>
-      <div class="step-t">Enter your URL</div>
-      <div class="step-d">We check 12 AI-readiness signals in under 20 seconds. No login, no install.</div>
-    </div>
-    <div class="step">
-      <div class="step-n">02 / SCORE</div>
-      <div class="step-t">Get your Pulse Score</div>
-      <div class="step-d">Your 0–100 score shows exactly where you stand vs. AI-ready competitors.</div>
-    </div>
-    <div class="step">
-      <div class="step-n">03 / FIX</div>
-      <div class="step-t">Get the roadmap</div>
-      <div class="step-d">Every gap includes a specific fix. We implement them for you, or you follow the guide.</div>
+<!-- ── SEGMENT SECTION ── -->
+<section class="section-wrap" style="background:var(--ink2)">
+  <div class="section-inner">
+    <div class="s-eyebrow reveal">Who this is for</div>
+    <h2 class="reveal">Wherever you are,<br><em>AI is already ahead of you.</em></h2>
+    <p class="section-lead reveal">Three types of Shopify founder are losing AI-referred revenue right now. The Pulse Score shows how much — and what to fix first.</p>
+
+    <div class="segment-grid reveal">
+      <div class="seg-card seg-a">
+        <div class="seg-tag">Segment A</div>
+        <div class="seg-rev">$100k – $500k annual revenue</div>
+        <h3>The Anxious Early Adopter</h3>
+        <p class="seg-pain">You know AI is changing commerce. You've seen ChatGPT Shopping. You just don't know what you're missing — or how bad the gap actually is.</p>
+        <div class="seg-divider"></div>
+        <div class="seg-next">Fastest path: <strong>Pulse → Starter Pack ($397)</strong></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Gaps closed in 5 business days</div>
+      </div>
+      <div class="seg-card seg-b" style="border-left:1px solid var(--line);border-right:1px solid var(--line)">
+        <div class="seg-tag">Segment B</div>
+        <div class="seg-rev">$500k – $2M annual revenue</div>
+        <h3>The Scaling Brand</h3>
+        <p class="seg-pain">You've tried SEO and CRO. Neither gave you a structural edge. AI is the next growth lever — and your competitors are building their infrastructure right now.</p>
+        <div class="seg-divider"></div>
+        <div class="seg-next">Best path: <strong>Pulse → LLM Foundation ($3,500)</strong></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Full AI infrastructure in 21 days</div>
+      </div>
+      <div class="seg-card seg-c">
+        <div class="seg-tag">Segment C</div>
+        <div class="seg-rev">$2M – $5M+ annual revenue</div>
+        <h3>The Enterprise DTC Brand</h3>
+        <p class="seg-pain">You have budget, a head of growth, and a board asking about AI strategy. You need a strategic partner — not an agency still selling last year's SEO.</p>
+        <div class="seg-divider"></div>
+        <div class="seg-next">Best path: <strong>Partner intro → Enterprise Transformation</strong></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Custom pricing · full agentic build</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- WHAT WE CHECK -->
-<section class="checks">
-  <h2 class="section-title">What we check</h2>
-  <div class="checks-grid">
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">agents.json</div><div class="check-pts">20 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">llms.txt</div><div class="check-pts">15 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Product JSON-LD schema</div><div class="check-pts">15 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Open Graph tags</div><div class="check-pts">8 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Product descriptions</div><div class="check-pts">8 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Breadcrumb schema</div><div class="check-pts">7 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Sitemap XML</div><div class="check-pts">7 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">robots.txt AI rules</div><div class="check-pts">5 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Review / rating schema</div><div class="check-pts">5 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">Canonical URLs</div><div class="check-pts">5 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">FAQ schema</div><div class="check-pts">3 points</div></div></div>
-    <div class="check-item"><div class="check-dot"></div><div><div class="check-label">HTTPS</div><div class="check-pts">2 points</div></div></div>
+<!-- ── VALUE LADDER ── -->
+<section class="section-wrap" style="background:var(--ink)">
+  <div class="section-inner-narrow">
+    <div class="s-eyebrow reveal">What happens after your scan</div>
+    <h2 class="reveal">A clear path from invisible<br>to <em>AI-native.</em></h2>
+    <p class="section-lead reveal">The Pulse Score is step one. Every rung below solves a larger problem — at a pace that matches your revenue and ambition.</p>
+
+    <div class="ladder reveal">
+      <div class="ladder-row featured">
+        <div><div class="ladder-stage">Free</div></div>
+        <div>
+          <div class="ladder-name">Pulse AI Commerce Audit</div>
+          <div class="ladder-desc">12-point automated audit. Score 0–100 with competitor benchmark. Every gap surfaced with a fix.</div>
+          <div class="ladder-here">You are here</div>
+        </div>
+        <div><div class="ladder-price free">Free</div></div>
+      </div>
+      <div class="ladder-row">
+        <div><div class="ladder-stage">Step 2</div></div>
+        <div>
+          <div class="ladder-name">AI Discoverability Starter Pack</div>
+          <div class="ladder-desc">Schema install, 10-SKU semantic rewrite, robots.txt + LLM.txt deploy. Score improvement in 5 days.</div>
+        </div>
+        <div><div class="ladder-price">$297 – $497</div></div>
+      </div>
+      <div class="ladder-row">
+        <div><div class="ladder-stage">Step 3</div></div>
+        <div>
+          <div class="ladder-name">LLM Commerce Foundation</div>
+          <div class="ladder-desc">Full catalog semantic feed, product knowledge graph, AI citation optimisation for Perplexity + ChatGPT. 21-day done-for-you delivery.</div>
+        </div>
+        <div><div class="ladder-price" style="color:var(--accent)">Custom</div></div>
+      </div>
+      <div class="ladder-row">
+        <div><div class="ladder-stage">Step 4</div></div>
+        <div>
+          <div class="ladder-name">AI Recommendation Engine</div>
+          <div class="ladder-desc">On-site AI shopping assistant, semantic search, upsell logic, AOV optimisation. Revenue attribution dashboard included.</div>
+        </div>
+        <div><div class="ladder-price" style="color:var(--accent)">Custom</div></div>
+      </div>
+      <div class="ladder-row">
+        <div><div class="ladder-stage">Step 5</div></div>
+        <div>
+          <div class="ladder-name">Agentic Commerce Retainer</div>
+          <div class="ladder-desc">Monthly feed updates, LLM monitoring, new AI channel readiness, competitive benchmarking. The AI landscape changes monthly — this keeps you ahead.</div>
+        </div>
+        <div><div class="ladder-price" style="color:var(--accent)">Custom</div></div>
+      </div>
+      <div class="ladder-row">
+        <div><div class="ladder-stage">Step 6</div></div>
+        <div>
+          <div class="ladder-name">Full Agentic Commerce Transformation</div>
+          <div class="ladder-desc">Agent-compatible APIs, autonomous purchase flow, OpenAI Operator + Google Agent Mode integrations, executive AI strategy + board reporting.</div>
+        </div>
+        <div><div class="ladder-price" style="color:var(--accent)">Custom</div></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem" class="reveal">
+      <a href="https://smartagentx.ai#services" class="btn-ghost">View full service details →</a>
+    </div>
   </div>
 </section>
 
+<!-- ── COMPETITOR COMPARISON ── -->
+<section class="section-wrap" style="background:var(--ink2)">
+  <div class="section-inner-narrow">
+    <div class="s-eyebrow reveal">Why not just use an SEO agency?</div>
+    <h2 class="reveal">SEO optimises for Google.<br><em>This is a different channel entirely.</em></h2>
+    <p class="section-lead reveal">ChatGPT doesn't use PageRank. Perplexity doesn't crawl backlinks. AI discovery runs on structured data, semantic feeds, and knowledge graphs — infrastructure no SEO agency is building.</p>
+
+    <div class="compare-table reveal">
+      <div class="compare-head">
+        <div class="compare-head-cell">Capability</div>
+        <div class="compare-head-cell">SEO Agency</div>
+        <div class="compare-head-cell">Shopify Agency</div>
+        <div class="compare-head-cell ours">SmartAgentX</div>
+      </div>
+      <div class="compare-row">
+        <div><div class="compare-label">AI discoverability</div><div class="compare-sub">ChatGPT, Perplexity, Gemini citations</div></div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-yes">✓</div>
+      </div>
+      <div class="compare-row">
+        <div><div class="compare-label">Product knowledge graph</div><div class="compare-sub">Semantic catalog infrastructure</div></div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-yes">✓</div>
+      </div>
+      <div class="compare-row">
+        <div><div class="compare-label">Agent-compatible APIs</div><div class="compare-sub">Autonomous purchase flow readiness</div></div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-yes">✓</div>
+      </div>
+      <div class="compare-row">
+        <div><div class="compare-label">Done-for-you execution</div><div class="compare-sub">Zero founder technical work required</div></div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-yes">✓</div>
+      </div>
+      <div class="compare-row">
+        <div><div class="compare-label">Google / traditional SEO</div><div class="compare-sub">Keywords, backlinks, rankings</div></div>
+        <div class="compare-cell c-yes">✓</div>
+        <div class="compare-cell c-partial">~</div>
+        <div class="compare-cell c-partial">~</div>
+      </div>
+      <div class="compare-row">
+        <div><div class="compare-label">Shopify technical implementation</div><div class="compare-sub">Schema, structured data, Shopify stack</div></div>
+        <div class="compare-cell c-partial">~</div>
+        <div class="compare-cell c-yes">✓</div>
+        <div class="compare-cell c-yes">✓</div>
+      </div>
+      <div class="compare-row">
+        <div><div class="compare-label">AI Commerce Score (Pulse)</div><div class="compare-sub">Measurable readiness metric + benchmarking</div></div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-yes">✓</div>
+      </div>
+      <div class="compare-row">
+        <div><div class="compare-label">AI-attributed revenue reporting</div><div class="compare-sub">AI-channel traffic + conversion data</div></div>
+        <div class="compare-cell c-partial">~</div>
+        <div class="compare-cell c-no">✗</div>
+        <div class="compare-cell c-yes">✓</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem;display:flex;justify-content:center;gap:12px;flex-wrap:wrap" class="reveal">
+      <button class="btn-accent" onclick="window.scrollTo({top:0,behavior:'smooth'})">Run your free Pulse audit →</button>
+      <a href="https://smartagentx.ai" class="btn-ghost">Learn about SmartAgentX</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ── -->
+<section class="final-section">
+  <div class="final-glow"></div>
+  <div style="position:relative">
+    <div class="final-eyebrow reveal">Get started</div>
+    <h2 class="final-h reveal">Find out your AI Commerce<br>Score — <em>free.</em></h2>
+    <p class="final-sub reveal">2 minutes. 12 data points. See exactly where AI is ignoring your store and what to fix first. Your competitors are doing this now.</p>
+    <div class="final-ctas reveal">
+      <button class="btn-accent" onclick="window.scrollTo({top:0,behavior:'smooth'})">Run your free Pulse audit →</button>
+      <a href="https://smartagentx.ai#services" class="btn-ghost">View all services</a>
+    </div>
+    <p class="final-note reveal">Free · No credit card · Results in under 2 minutes</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  <span>© 2025 SmartAgentX</span>
+  <a href="https://smartagentx.ai" class="nav-logo" style="font-size:13px">SmartAgent<span>X</span></a>
   <span>pulse.smartagentx.ai</span>
-  <span>hello@smartagentx.ai</span>
+  <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="79111c151516390a14180b0d181e1c170d01571810">[email&#160;protected]</a>
+  <span>© 2025 SmartAgentX · Agentic Commerce Enablement</span>
 </footer>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
-// ── Config ─────────────────────────────────────────────────────────────────
-// After deploying to Vercel, replace this URL with your actual Vercel URL
-// e.g. https://pulse-api.vercel.app
-const API = 'https://pulse-api-two.vercel.app';
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const ro = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.style.transitionDelay = (i * 0.045) + 's';
+      entry.target.classList.add('visible');
+      ro.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+reveals.forEach(el => ro.observe(el));
 
+// Show nav links after scroll
+window.addEventListener('scroll', () => {
+  const link = document.getElementById('nav-services-link');
+  if (window.scrollY > 300) link.style.display = 'block';
+  else link.style.display = 'none';
+}, { passive: true });
+
+const API = 'https://pulse-api-two.vercel.app';
 let reportData = null;
 
-// ── Scan ───────────────────────────────────────────────────────────────────
 async function startScan() {
   const input = document.getElementById('url-input');
-  const btn   = document.getElementById('scan-btn');
-  let   url   = input.value.trim();
+  const btn = document.getElementById('scan-btn');
+  let url = input.value.trim();
   if (!url) { input.focus(); return; }
-
   btn.disabled = true;
   btn.textContent = 'Scanning...';
   document.getElementById('results').style.display = 'none';
   showProgress();
-
   try {
     let data;
     try {
-      const res = await fetch(`${API}/api/scan`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({url}),
-      });
+      const res = await fetch(`${API}/api/scan`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({url}) });
       if (!res.ok) throw new Error('api error');
       data = await res.json();
-    } catch(e) {
-      data = mockReport(url); // graceful fallback for demo
-    }
-
+    } catch(e) { data = mockReport(url); }
     reportData = data;
     renderResults(data);
   } finally {
@@ -409,99 +585,59 @@ async function startScan() {
   }
 }
 
-// ── Progress bar ───────────────────────────────────────────────────────────
-const steps = [
-  'Checking agents.json...','Looking for llms.txt...',
-  'Parsing product schemas...','Checking Open Graph...',
-  'Scanning sitemap...','Evaluating descriptions...',
-  'Checking review schemas...','Computing Pulse Score...',
-];
-let _progInterval;
-
+const steps = ['Checking agents.json...','Looking for llms.txt...','Parsing product schemas...','Checking Open Graph...','Scanning sitemap...','Evaluating descriptions...','Checking review schemas...','Computing Pulse Score...'];
+let _pi;
 function showProgress() {
-  const el = document.getElementById('prog');
-  el.style.display = 'block';
+  document.getElementById('prog').style.display = 'block';
   let i = 0;
-  _progInterval = setInterval(() => {
+  _pi = setInterval(() => {
     i++;
     document.getElementById('prog-fill').style.width = Math.min(i/steps.length*90,90)+'%';
     document.getElementById('prog-lbl').textContent = steps[Math.min(i,steps.length-1)];
-    if(i >= steps.length) clearInterval(_progInterval);
+    if (i >= steps.length) clearInterval(_pi);
   }, 400);
 }
 function hideProgress() {
-  clearInterval(_progInterval);
+  clearInterval(_pi);
   document.getElementById('prog-fill').style.width = '100%';
   setTimeout(() => document.getElementById('prog').style.display='none', 300);
 }
 
-// ── Render results ─────────────────────────────────────────────────────────
 function renderResults(data) {
   const sec = document.getElementById('results');
   sec.style.display = 'block';
   sec.scrollIntoView({behavior:'smooth',block:'start'});
-
-  // Score
   const scoreEl = document.getElementById('score-num');
-  scoreEl.textContent  = data.score;
-  scoreEl.style.color  = data.color;
-
+  scoreEl.textContent = data.score;
+  scoreEl.style.color = data.color;
   const badge = document.getElementById('tier-badge');
-  badge.textContent    = data.tier.replace('-',' ');
+  badge.textContent = data.tier.replace('-',' ');
   badge.style.background = data.color + '18';
-  badge.style.color      = data.color;
-
+  badge.style.color = data.color;
   document.getElementById('score-domain').textContent = data.domain;
   document.getElementById('score-impact').textContent = data.impact;
-
-  // Preview signals
-  document.getElementById('preview-signals').innerHTML =
-    data.preview.map(s => `
-      <div class="sig-card">
-        <div class="sig-icon ${s.passed?'ic-pass':'ic-fail'}">${s.passed?'✓':'✗'}</div>
-        <div style="flex:1">
-          <div class="sig-name">${s.name}</div>
-          <div class="sig-detail">${s.detail}</div>
-        </div>
-        <div class="sig-pts">${s.weight}pts</div>
-      </div>`).join('');
-
-  // Reset gate
+  document.getElementById('preview-signals').innerHTML = data.preview.map(s => `
+    <div class="sig-card">
+      <div class="sig-icon ${s.passed?'ic-pass':'ic-fail'}">${s.passed?'✓':'✗'}</div>
+      <div style="flex:1"><div class="sig-name">${s.name}</div><div class="sig-detail">${s.detail}</div></div>
+      <div class="sig-pts">${s.weight}pts</div>
+    </div>`).join('');
   document.getElementById('gate').style.display = 'block';
   document.getElementById('full-report').style.display = 'none';
   document.getElementById('gate-success').style.display = 'none';
   document.getElementById('gate-email').value = '';
 }
 
-// ── Email capture ──────────────────────────────────────────────────────────
 async function captureEmail() {
   const emailEl = document.getElementById('gate-email');
-  const email   = emailEl.value.trim();
+  const email = emailEl.value.trim();
   if (!email || !email.includes('@')) { emailEl.focus(); return; }
-
-  // Show success message immediately — don't wait for email
   document.getElementById('gate-success').style.display = 'block';
   document.querySelector('.gate-row').style.display = 'none';
   document.querySelector('.gate-note').style.display = 'none';
-
-  // Send to API (fire and forget)
   if (reportData) {
-    fetch(`${API}/api/leads`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        email,
-        name:      '',
-        domain:    reportData.domain,
-        score:     reportData.score,
-        tier:      reportData.tier,
-        color:     reportData.color,
-        top_gaps:  reportData.top_gaps,
-        report_id: reportData.id,
-      }),
-    }).catch(() => {});
+    fetch(`${API}/api/leads`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, name:'', domain:reportData.domain, score:reportData.score, tier:reportData.tier, color:reportData.color, top_gaps:reportData.top_gaps, report_id:reportData.id }) }).catch(()=>{});
   }
-
   setTimeout(() => unlockFullReport(), 1200);
 }
 
@@ -509,76 +645,42 @@ function unlockFullReport() {
   if (!reportData) return;
   document.getElementById('gate').style.display = 'none';
   document.getElementById('full-report').style.display = 'block';
-
   const signals = reportData.signals || [];
-  document.getElementById('full-signals').innerHTML =
-    signals.sort((a,b) => b.weight-a.weight).map(s => `
-      <div class="fsig ${s.passed?'pass':'fail'}">
-        <div class="sig-icon ${s.passed?'ic-pass':'ic-fail'}"
-             style="width:22px;height:22px;font-size:11px;border-radius:4px">
-          ${s.passed?'✓':'✗'}
-        </div>
-        <div style="flex:1">
-          <div class="fsig-name">${s.name}</div>
-          ${!s.passed?`<div class="fsig-fix">Fix: ${s.fix}</div>`:''}
-        </div>
-        <div class="fsig-score" style="color:${s.passed?'var(--teal)':'var(--coral)'}">
-          ${s.score}/${s.weight}
-        </div>
-      </div>`).join('');
-
+  document.getElementById('full-signals').innerHTML = signals.sort((a,b)=>b.weight-a.weight).map(s=>`
+    <div class="fsig ${s.passed?'pass':'fail'}">
+      <div class="sig-icon ${s.passed?'ic-pass':'ic-fail'}" style="width:22px;height:22px;font-size:11px;border-radius:4px">${s.passed?'✓':'✗'}</div>
+      <div style="flex:1"><div class="fsig-name">${s.name}</div>${!s.passed?`<div class="fsig-fix">Fix: ${s.fix}</div>`:''}</div>
+      <div class="fsig-score" style="color:${s.passed?'var(--accent)':'var(--red)'}">${s.score}/${s.weight}</div>
+    </div>`).join('');
   document.getElementById('full-report').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ── Enter key ──────────────────────────────────────────────────────────────
-document.getElementById('url-input').addEventListener('keypress', e => {
-  if (e.key === 'Enter') startScan();
-});
+document.getElementById('url-input').addEventListener('keypress', e => { if(e.key==='Enter') startScan(); });
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('gate-email').addEventListener('keypress', e => {
-    if (e.key === 'Enter') captureEmail();
-  });
+  document.getElementById('gate-email').addEventListener('keypress', e => { if(e.key==='Enter') captureEmail(); });
 });
 
-// ── Mock data (shown if API is unreachable) ────────────────────────────────
 function mockReport(url) {
   const domain = url.replace(/https?:\/\/(www\.)?/,'').split('/')[0];
-  const score  = Math.floor(Math.random()*38)+8;
-  const tiers  = [
-    [80,'optimised','#085041'],[55,'capable','#0F6E56'],
-    [30,'emerging','#854F0B'],[0,'agent-blind','#791F1F']
-  ];
+  const score = Math.floor(Math.random()*38)+8;
+  const tiers = [[80,'optimised','#00D4AA'],[55,'capable','#3B7BF5'],[30,'emerging','#F5A623'],[0,'agent-blind','#E24B4A']];
   const [,tier,color] = tiers.find(([t]) => score >= t);
-
   const allSignals = [
-    {key:'agents_json',   name:'agents.json',           weight:20,passed:score>70,score:score>70?20:0,  detail:'agents.json missing — AI agents cannot discover your store',fix:'Create /agents.json with store name, description, and product catalog'},
-    {key:'llms_txt',      name:'llms.txt',               weight:15,passed:score>65,score:score>65?15:0,  detail:'llms.txt missing — LLMs have no context about your store',fix:'Create /llms.txt with brand description, product categories, policies'},
-    {key:'product_schema',name:'Product JSON-LD schema', weight:15,passed:score>40,score:score>40?15:0,  detail:'No Product schema — AI cannot parse your product details',fix:'Add JSON-LD Product schema with name, price, description, image'},
-    {key:'open_graph',    name:'Open Graph tags',        weight:8, passed:score>30,score:score>30?8:4,   detail:'Some OG tags missing',fix:'Add og:title, og:description, og:image, og:url'},
-    {key:'product_desc',  name:'Product descriptions',   weight:8, passed:score>50,score:score>50?8:3,   detail:'Thin product descriptions (<150 chars)',fix:'Expand to 200+ words with use cases and specifications'},
-    {key:'breadcrumbs',   name:'Breadcrumb schema',      weight:7, passed:score>45,score:score>45?7:0,   detail:'No breadcrumb schema — AI cannot understand site structure',fix:'Add BreadcrumbList JSON-LD to category and product pages'},
-    {key:'sitemap',       name:'Sitemap XML',             weight:7, passed:score>20,score:score>20?7:0,   detail:'No sitemap.xml — AI crawlers cannot discover full catalogue',fix:'Generate and submit sitemap.xml including all product pages'},
-    {key:'robots_ai',     name:'robots.txt AI rules',    weight:5, passed:score>35,score:score>35?5:2,   detail:'robots.txt has no AI crawler rules',fix:'Allow GPTBot, ClaudeBot, PerplexityBot in robots.txt'},
-    {key:'review_schema', name:'Review / rating schema', weight:5, passed:score>60,score:score>60?5:0,   detail:'No review schema — AI cannot surface your ratings',fix:'Add AggregateRating JSON-LD with ratingValue and reviewCount'},
-    {key:'canonical',     name:'Canonical URLs',          weight:5, passed:score>25,score:score>25?5:0,   detail:'No canonical tag — AI may index duplicate content',fix:"Add <link rel='canonical'> to every page"},
-    {key:'faq_schema',    name:'FAQ schema',              weight:3, passed:score>75,score:score>75?3:0,   detail:'No FAQPage schema — missed Q&A opportunity',fix:'Add FAQPage JSON-LD with common product questions'},
-    {key:'https_check',   name:'HTTPS',                   weight:2, passed:true,    score:2,             detail:'Site uses HTTPS',fix:'Already done'},
+    {key:'agents_json',   name:'agents.json',           weight:20,passed:score>70,score:score>70?20:0, detail:'agents.json missing — AI agents cannot discover your store',fix:'Create /agents.json with store name, description, and product catalog'},
+    {key:'llms_txt',      name:'llms.txt',               weight:15,passed:score>65,score:score>65?15:0, detail:'llms.txt missing — LLMs have no context about your store',fix:'Create /llms.txt with brand description, product categories, policies'},
+    {key:'product_schema',name:'Product JSON-LD schema', weight:15,passed:score>40,score:score>40?15:0, detail:'No Product schema — AI cannot parse your product details',fix:'Add JSON-LD Product schema with name, price, description, image'},
+    {key:'open_graph',    name:'Open Graph tags',        weight:8, passed:score>30,score:score>30?8:4,  detail:'Some OG tags missing',fix:'Add og:title, og:description, og:image, og:url'},
+    {key:'product_desc',  name:'Product descriptions',   weight:8, passed:score>50,score:score>50?8:3,  detail:'Thin product descriptions (<150 chars)',fix:'Expand to 200+ words with use cases and specifications'},
+    {key:'breadcrumbs',   name:'Breadcrumb schema',      weight:7, passed:score>45,score:score>45?7:0,  detail:'No breadcrumb schema — AI cannot understand site structure',fix:'Add BreadcrumbList JSON-LD to category and product pages'},
+    {key:'sitemap',       name:'Sitemap XML',             weight:7, passed:score>20,score:score>20?7:0,  detail:'No sitemap.xml — AI crawlers cannot discover full catalogue',fix:'Generate and submit sitemap.xml including all product pages'},
+    {key:'robots_ai',     name:'robots.txt AI rules',    weight:5, passed:score>35,score:score>35?5:2,  detail:'robots.txt has no AI crawler rules',fix:'Allow GPTBot, ClaudeBot, PerplexityBot in robots.txt'},
+    {key:'review_schema', name:'Review / rating schema', weight:5, passed:score>60,score:score>60?5:0,  detail:'No review schema — AI cannot surface your ratings',fix:'Add AggregateRating JSON-LD with ratingValue and reviewCount'},
+    {key:'canonical',     name:'Canonical URLs',          weight:5, passed:score>25,score:score>25?5:0,  detail:'No canonical tag — AI may index duplicate content',fix:"Add <link rel='canonical'> to every page"},
+    {key:'faq_schema',    name:'FAQ schema',              weight:3, passed:score>75,score:score>75?3:0,  detail:'No FAQPage schema — missed Q&A opportunity',fix:'Add FAQPage JSON-LD with common product questions'},
+    {key:'https_check',   name:'HTTPS',                   weight:2, passed:true,   score:2,             detail:'Site uses HTTPS',fix:'Already done'},
   ];
-
   const failed = allSignals.filter(s=>!s.passed).sort((a,b)=>b.weight-a.weight);
-  return {
-    id:     'demo-'+Math.random().toString(36).slice(2),
-    domain, score, tier, color,
-    impact: score<30?'Critical — store is largely invisible to AI assistants'
-           :score<55?'High — significant AI revenue being missed'
-           :'Moderate — some gaps worth addressing',
-    top_gaps: failed.slice(0,3).map(s=>`${s.name}: ${s.fix}`),
-    preview: [
-      ...failed.slice(0,2).map(s=>({name:s.name,passed:false,weight:s.weight,detail:s.detail})),
-      {name:'HTTPS',passed:true,weight:2,detail:'Site uses HTTPS'},
-    ],
-    signals: allSignals,
-  };
+  return { id:'demo-'+Math.random().toString(36).slice(2), domain, score, tier, color, impact: score<30?'Critical — store is largely invisible to AI assistants':score<55?'High — significant AI revenue being missed':'Moderate — some gaps worth addressing', top_gaps: failed.slice(0,3).map(s=>`${s.name}: ${s.fix}`), preview: allSignals.slice(0,4), signals: allSignals };
 }
 </script>
 </body>
